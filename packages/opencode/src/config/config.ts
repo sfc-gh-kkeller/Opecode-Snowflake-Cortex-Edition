@@ -1111,10 +1111,10 @@ export namespace Config {
 
   export const global = lazy(async () => {
     const globalFiles = ["config.json", "opencode.json", "opencode.jsonc", ...cortexConfigFiles]
-    let result: Info = pipe(
-      {},
-      ...globalFiles.map((file) => mergeDeep(await loadFile(path.join(Global.Path.config, file)))),
-    )
+    let result: Info = {}
+    for (const file of globalFiles) {
+      result = mergeDeep(result, await loadFile(path.join(Global.Path.config, file)))
+    }
 
     const legacy = path.join(Global.Path.config, "config")
     if (existsSync(legacy)) {
