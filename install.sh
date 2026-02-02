@@ -329,7 +329,22 @@ download_and_install() {
         unzip -q "$tmp_dir/$filename" -d "$tmp_dir"
     fi
 
-    mv "$tmp_dir/opencode" "$INSTALL_DIR"
+    # Find the binary - it's in a subdirectory structure: opencode-<target>/bin/opencode
+    local binary_name="opencode"
+    if [ "$os" = "windows" ]; then
+        binary_name="opencode.exe"
+    fi
+    
+    local extracted_binary
+    extracted_binary=$(find "$tmp_dir" -name "$binary_name" -type f | head -1)
+    
+    if [ -z "$extracted_binary" ]; then
+        print_message error "Could not find opencode binary in archive"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    mv "$extracted_binary" "${INSTALL_DIR}/opencode"
     chmod 755 "${INSTALL_DIR}/opencode"
     rm -rf "$tmp_dir"
 }
