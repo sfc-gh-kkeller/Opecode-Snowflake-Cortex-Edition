@@ -42,7 +42,7 @@
   <a href="README.th.md">ไทย</a>
 </p>
 
-[![OpenCode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://opencode.ai)
+[![OpenCode Snowflake Cortex Edition](opencode_cortex_opus.png)](https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition)
 
 ---
 
