@@ -1016,6 +1016,21 @@ export namespace Provider {
           }
         }
 
+        // Snowflake Cortex compatibility: transform max_tokens to max_completion_tokens
+        // Snowflake's OpenAI-compatible API requires max_completion_tokens instead of max_tokens
+        if (options["snowflakeCortex"] && opts.body && opts.method === "POST") {
+          try {
+            const body = JSON.parse(opts.body as string)
+            if (body.max_tokens !== undefined && body.max_completion_tokens === undefined) {
+              body.max_completion_tokens = body.max_tokens
+              delete body.max_tokens
+              opts.body = JSON.stringify(body)
+            }
+          } catch {
+            // If body parsing fails, continue with original request
+          }
+        }
+
         return fetchFn(input, {
           ...opts,
           // @ts-ignore see here: https://github.com/oven-sh/bun/issues/16682
