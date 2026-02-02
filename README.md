@@ -49,11 +49,11 @@
 ### Installation
 
 ```bash
-# Install from this repo's releases
+# Install prebuilt binary (recommended)
 curl -fsSL https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/releases/latest/download/install.sh | bash
 
-# Package managers
-# Not yet published for this fork. Use the release binaries or build from source below.
+# Or build from source (installs bun if needed, clones, builds, installs)
+curl -fsSL https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/releases/latest/download/install_source.sh | bash
 ```
 
 > [!TIP]
