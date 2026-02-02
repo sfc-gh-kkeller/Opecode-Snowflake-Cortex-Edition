@@ -170,13 +170,14 @@ else
     REPO="sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition"
 
     if [ -z "$requested_version" ]; then
-        url="https://github.com/${REPO}/releases/latest/download/$filename"
         specific_version=$(curl -s "https://api.github.com/repos/${REPO}/releases/latest" | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
 
         if [[ $? -ne 0 || -z "$specific_version" ]]; then
             echo -e "${RED}Failed to fetch version information${NC}"
             exit 1
         fi
+        # Use tag-specific download URL to avoid "latest" CDN cache issues
+        url="https://github.com/${REPO}/releases/download/v${specific_version}/$filename"
     else
         # Strip leading 'v' if present
         requested_version="${requested_version#v}"
