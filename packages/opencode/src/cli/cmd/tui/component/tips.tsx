@@ -49,6 +49,7 @@ export function Tips() {
 }
 
 const TIPS = [
+  "Snowflake Cortex quickstart: {highlight}cd <project>{/highlight} # Open directory, {highlight}opencode{/highlight} # Run command. Configure Cortex in opencode.json: https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition#snowflake-cortex-edition",
   "Type {highlight}@{/highlight} followed by a filename to fuzzy search and attach files",
   "Start a message with {highlight}!{/highlight} to run shell commands directly (e.g., {highlight}!ls -la{/highlight})",
   "Press {highlight}Tab{/highlight} to cycle between Build and Plan agents",
