@@ -88,6 +88,10 @@ bun dev
 
 Configure Snowflake Cortex:
 
+This edition still supports the standard `opencode.json`/`opencode.jsonc` format.
+You can use either `opencode.json` or `opencode_cortex.json` — both are compatible.
+If both exist, `opencode_cortex.json` takes precedence.
+
 Use the onboarding wizard (recommended):
 
 ```bash
@@ -124,27 +128,48 @@ Or create `opencode_cortex.json` in your project (or `~/.config/opencode/opencod
 }
 ```
 
+### Snowflake Cortex: Quick How-To
+
+1) Install the Snowflake edition:
+
+```bash
+curl -fsSL https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/releases/latest/download/install.sh | bash
+```
+
+2) Run the onboarding wizard (imports Snowflake CLI config if present):
+
+```bash
+opencode_cortex cortex-init
+```
+
+3) Set your PAT (if you chose env var in the wizard):
+
+```bash
+export SNOWFLAKE_PAT="your_pat_here"
+```
+
+4) Start OpenCode Cortex:
+
+```bash
+opencode_cortex
+```
+
+5) Verify/adjust config if needed:
+- Project: `./opencode_cortex.json` or `./opencode_cortex.jsonc`
+- Global: `~/.config/opencode/opencode_cortex.jsonc`
+
+### Contributing (commit + push)
+
+```bash
+git status -sb
+git add -A
+git commit -m "your message"
+git push
+```
+
 Guides:
 
 - [PATCHING.md](./PATCHING.md) — build + patch existing installs
-
-### Desktop App (BETA)
-
-OpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/anomalyco/opencode/releases) or [opencode.ai/download](https://opencode.ai/download).
-
-| Platform              | Download                              |
-| --------------------- | ------------------------------------- |
-| macOS (Apple Silicon) | `opencode-desktop-darwin-aarch64.dmg` |
-| macOS (Intel)         | `opencode-desktop-darwin-x64.dmg`     |
-| Windows               | `opencode-desktop-windows-x64.exe`    |
-| Linux                 | `.deb`, `.rpm`, or AppImage           |
-
-```bash
-# macOS (Homebrew)
-brew install --cask opencode-desktop
-# Windows (Scoop)
-scoop bucket add extras; scoop install extras/opencode-desktop
-```
 
 #### Installation Directory
 
