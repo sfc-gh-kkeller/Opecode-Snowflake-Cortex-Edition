@@ -62,7 +62,7 @@ curl -fsSL https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/re
 ### Snowflake Cortex Edition
 
 This edition adds Snowflake Cortex compatibility and is intended to make OpenCode work reliably with Cortex’s OpenAI-compatible API.
-It is a community-maintained fork and is not affiliated with the OpenCode team.
+It is a community-maintained fork by Kevin Keller and is not affiliated with the OpenCode team.
 
 How it differs:
 
@@ -158,15 +158,6 @@ opencode_cortex
 - Project: `./opencode_cortex.json` or `./opencode_cortex.jsonc`
 - Global: `~/.config/opencode/opencode_cortex.jsonc`
 
-### Contributing (commit + push)
-
-```bash
-git status -sb
-git add -A
-git commit -m "your message"
-git push
-```
-
 Guides:
 
 - [PATCHING.md](./PATCHING.md) — build + patch existing installs
@@ -182,8 +173,8 @@ The install script respects the following priority order for the installation pa
 
 ```bash
 # Examples
-OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash
-XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
+OPENCODE_INSTALL_DIR=/usr/local/bin 
+XDG_BIN_DIR=$HOME/.local/bin 
 ```
 
 ### Agents
@@ -207,11 +198,7 @@ For more info on how to configure OpenCode [**head over to our docs**](https://o
 
 ### Contributing
 
-If you're interested in contributing to OpenCode, please read our [contributing docs](./CONTRIBUTING.md) before submitting a pull request.
-
-### Building on OpenCode
-
-If you are working on a project that's related to OpenCode and is using "opencode" as a part of its name; for example, "opencode-dashboard" or "opencode-mobile", please add a note to your README to clarify that it is not built by the OpenCode team and is not affiliated with us in any way.
+If you're interested in contributing to OpenCode Cortex edition, just create a PR 
 
 ### FAQ
 
@@ -227,4 +214,4 @@ It's very similar to Claude Code in terms of capability. Here are the key differ
 
 ---
 
-**Join our community** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)
+
