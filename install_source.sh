@@ -158,7 +158,7 @@ build_opencode() {
     cd "$BUILD_DIR"
     bun install
 
-    print_step "Building opencode binary..."
+    print_step "Building opencode_cortex binary..."
     bun ./packages/opencode/script/build.ts --single
 
     # Find the built binary
@@ -186,7 +186,7 @@ build_opencode() {
         fi
     fi
 
-    binary_path="$BUILD_DIR/packages/opencode/dist/opencode-${os}-${arch}/bin/opencode"
+    binary_path="$BUILD_DIR/packages/opencode/dist/opencode_cortex-${os}-${arch}/bin/opencode_cortex"
 
     if [[ ! -f "$binary_path" ]]; then
         print_error "Build failed - binary not found at: $binary_path"
@@ -204,10 +204,11 @@ install_binary() {
     print_step "Installing to ${INSTALL_DIR}..."
 
     mkdir -p "$INSTALL_DIR"
-    cp "$BUILT_BINARY" "$INSTALL_DIR/opencode"
-    chmod 755 "$INSTALL_DIR/opencode"
+    cp "$BUILT_BINARY" "$INSTALL_DIR/opencode_cortex"
+    chmod 755 "$INSTALL_DIR/opencode_cortex"
+    ln -sf "opencode_cortex" "$INSTALL_DIR/opencode"
 
-    print_info "  Installed: ${INSTALL_DIR}/opencode"
+    print_info "  Installed: ${INSTALL_DIR}/opencode_cortex"
 }
 
 # Add to PATH
@@ -218,7 +219,7 @@ add_to_path() {
     if grep -Fxq "$command" "$config_file" 2>/dev/null; then
         print_info "  Already in PATH via $config_file"
     elif [[ -w "$config_file" ]]; then
-        echo -e "\n# opencode" >> "$config_file"
+        echo -e "\n# opencode_cortex" >> "$config_file"
         echo "$command" >> "$config_file"
         print_info "  Added to PATH in $config_file"
     else
@@ -280,7 +281,7 @@ cleanup() {
 # Print success message
 print_success() {
     local version
-    version=$("$INSTALL_DIR/opencode" --version 2>/dev/null || echo "unknown")
+    version=$("$INSTALL_DIR/opencode_cortex" --version 2>/dev/null || echo "unknown")
 
     echo -e ""
     echo -e "${MUTED}                    ${NC}             ▄     "
@@ -292,12 +293,12 @@ print_success() {
     echo -e "${GREEN}Successfully installed!${NC}"
     echo -e ""
     echo -e "  ${MUTED}Version:${NC}  $version"
-    echo -e "  ${MUTED}Binary:${NC}   $INSTALL_DIR/opencode"
+    echo -e "  ${MUTED}Binary:${NC}   $INSTALL_DIR/opencode_cortex"
     echo -e ""
     echo -e "${MUTED}To start with Snowflake Cortex:${NC}"
     echo -e ""
     echo -e "  cd <project>  ${MUTED}# Open directory${NC}"
-    echo -e "  opencode      ${MUTED}# Run command${NC}"
+    echo -e "  opencode_cortex ${MUTED}# Run command${NC}"
     echo -e ""
     echo -e "${MUTED}Configure Cortex in opencode.json - see:${NC}"
     echo -e "https://github.com/${REPO}#snowflake-cortex-edition"

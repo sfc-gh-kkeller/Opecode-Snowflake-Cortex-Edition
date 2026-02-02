@@ -75,6 +75,7 @@ Quick start:
 Option 1 — Download a prebuilt binary (recommended):
 
 - Releases: https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/releases
+- Command: `opencode_cortex`
 
 Option 2 — Build from source:
 

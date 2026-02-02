@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-APP=opencode
+APP=opencode_cortex
 
 MUTED='\033[0;2m'
 RED='\033[0;31m'
@@ -22,7 +22,7 @@ Options:
 Examples:
     curl -fsSL https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/releases/latest/download/install.sh | bash
     curl -fsSL https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition/releases/latest/download/install.sh | bash -s -- --version 0.0.0
-    ./install.sh --binary /path/to/opencode
+    ./install.sh --binary /path/to/opencode_cortex
 EOF
 }
 
@@ -209,12 +209,19 @@ print_message() {
 }
 
 check_version() {
-    if command -v opencode >/dev/null 2>&1; then
+    if command -v opencode_cortex >/dev/null 2>&1; then
+        opencode_path=$(which opencode_cortex)
+
+        ## Check the installed version
+        installed_version=$(opencode_cortex --version 2>/dev/null || echo "")
+    elif command -v opencode >/dev/null 2>&1; then
         opencode_path=$(which opencode)
 
         ## Check the installed version
         installed_version=$(opencode --version 2>/dev/null || echo "")
+    fi
 
+    if [[ -n "${installed_version-}" ]]; then
         if [[ "$installed_version" != "$specific_version" ]]; then
             print_message info "${MUTED}Installed version: ${NC}$installed_version."
         else
@@ -315,7 +322,7 @@ download_with_progress() {
 }
 
 download_and_install() {
-    print_message info "\n${MUTED}Installing ${NC}opencode ${MUTED}version: ${NC}$specific_version"
+    print_message info "\n${MUTED}Installing ${NC}opencode_cortex ${MUTED}version: ${NC}$specific_version"
     local tmp_dir="${TMPDIR:-/tmp}/opencode_install_$$"
     mkdir -p "$tmp_dir"
 
@@ -330,30 +337,32 @@ download_and_install() {
         unzip -q "$tmp_dir/$filename" -d "$tmp_dir"
     fi
 
-    # Find the binary - it's in a subdirectory structure: opencode-<target>/bin/opencode
-    local binary_name="opencode"
+    # Find the binary - it's in a subdirectory structure: opencode_cortex-<target>/bin/opencode_cortex
+    local binary_name="opencode_cortex"
     if [ "$os" = "windows" ]; then
-        binary_name="opencode.exe"
+        binary_name="opencode_cortex.exe"
     fi
     
     local extracted_binary
     extracted_binary=$(find "$tmp_dir" -name "$binary_name" -type f | head -1)
     
     if [ -z "$extracted_binary" ]; then
-        print_message error "Could not find opencode binary in archive"
+        print_message error "Could not find opencode_cortex binary in archive"
         rm -rf "$tmp_dir"
         exit 1
     fi
 
-    mv "$extracted_binary" "${INSTALL_DIR}/opencode"
-    chmod 755 "${INSTALL_DIR}/opencode"
+    mv "$extracted_binary" "${INSTALL_DIR}/opencode_cortex"
+    chmod 755 "${INSTALL_DIR}/opencode_cortex"
+    ln -sf "opencode_cortex" "${INSTALL_DIR}/opencode"
     rm -rf "$tmp_dir"
 }
 
 install_from_binary() {
-    print_message info "\n${MUTED}Installing ${NC}opencode ${MUTED}from: ${NC}$binary_path"
-    cp "$binary_path" "${INSTALL_DIR}/opencode"
-    chmod 755 "${INSTALL_DIR}/opencode"
+    print_message info "\n${MUTED}Installing ${NC}opencode_cortex ${MUTED}from: ${NC}$binary_path"
+    cp "$binary_path" "${INSTALL_DIR}/opencode_cortex"
+    chmod 755 "${INSTALL_DIR}/opencode_cortex"
+    ln -sf "opencode_cortex" "${INSTALL_DIR}/opencode"
 }
 
 if [ -n "$binary_path" ]; then
@@ -371,9 +380,9 @@ add_to_path() {
     if grep -Fxq "$command" "$config_file"; then
         print_message info "Command already exists in $config_file, skipping write."
     elif [[ -w $config_file ]]; then
-        echo -e "\n# opencode" >> "$config_file"
+        echo -e "\n# opencode_cortex" >> "$config_file"
         echo "$command" >> "$config_file"
-        print_message info "${MUTED}Successfully added ${NC}opencode ${MUTED}to \$PATH in ${NC}$config_file"
+        print_message info "${MUTED}Successfully added ${NC}opencode_cortex ${MUTED}to \$PATH in ${NC}$config_file"
     else
         print_message warning "Manually add the directory to $config_file (or similar):"
         print_message info "  $command"
@@ -460,7 +469,7 @@ echo -e ""
 echo -e "${MUTED}To start with Snowflake Cortex:${NC}"
 echo -e ""
 echo -e "cd <project>  ${MUTED}# Open directory${NC}"
-echo -e "opencode      ${MUTED}# Run command${NC}"
+echo -e "opencode_cortex ${MUTED}# Run command${NC}"
 echo -e ""
 echo -e "${MUTED}Configure Cortex in opencode.json - see:${NC}"
 echo -e "https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition#snowflake-cortex-edition"
