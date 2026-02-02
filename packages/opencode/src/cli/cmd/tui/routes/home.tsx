@@ -1,5 +1,5 @@
 import { Prompt, type PromptRef } from "@tui/component/prompt"
-import { createMemo, Match, onMount, Show, Switch } from "solid-js"
+import { createMemo, For, Match, onMount, Show, Switch } from "solid-js"
 import { useTheme } from "@tui/context/theme"
 import { useKeybind } from "@tui/context/keybind"
 import { Logo } from "../component/logo"
@@ -91,11 +91,46 @@ export function Home() {
 
   const keybind = useKeybind()
 
+  const snowflakeArt = [
+    "    *     *    ",
+    " *     *     * ",
+    "    *  *  *    ",
+    " *     *     * ",
+    "    *     *    ",
+  ]
+
   return (
     <>
       <box flexGrow={1} justifyContent="center" alignItems="center" paddingLeft={2} paddingRight={2} gap={1}>
         <box height={3} />
         <Logo />
+        <box alignItems="center" gap={1} paddingTop={1}>
+          <box>
+            <For each={snowflakeArt}>
+              {(line) => (
+                <text fg={theme.textMuted} selectable={false}>
+                  {line}
+                </text>
+              )}
+            </For>
+          </box>
+          <text fg={theme.textMuted}>Snowflake Cortex Edition</text>
+          <box flexDirection="column" alignItems="flex-start">
+            <text fg={theme.textMuted}>To start with Snowflake Cortex:</text>
+            <text fg={theme.text}>
+              <span style={{ fg: theme.text }}>cd &lt;project&gt;</span>{" "}
+              <span style={{ fg: theme.textMuted }}># Open directory</span>
+            </text>
+            <text fg={theme.text}>
+              <span style={{ fg: theme.text }}>opencode</span>{" "}
+              <span style={{ fg: theme.textMuted }}># Run command</span>
+            </text>
+            <text fg={theme.textMuted}>Configure Cortex in opencode.json - see:</text>
+            <text fg={theme.textMuted}>
+              https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition#snowflake-cortex-edition
+            </text>
+          </box>
+        </box>
         <box width="100%" maxWidth={75} zIndex={1000} paddingTop={1}>
           <Prompt
             ref={(r) => {
