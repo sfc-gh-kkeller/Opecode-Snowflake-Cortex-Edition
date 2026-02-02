@@ -206,7 +206,6 @@ install_binary() {
     mkdir -p "$INSTALL_DIR"
     cp "$BUILT_BINARY" "$INSTALL_DIR/opencode_cortex"
     chmod 755 "$INSTALL_DIR/opencode_cortex"
-    ln -sf "opencode_cortex" "$INSTALL_DIR/opencode"
 
     print_info "  Installed: ${INSTALL_DIR}/opencode_cortex"
 }
