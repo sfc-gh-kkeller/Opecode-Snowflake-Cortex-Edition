@@ -179,7 +179,9 @@ export namespace Installation {
     await $`${process.execPath} --version`.nothrow().quiet().text()
   }
 
-  export const VERSION = typeof OPENCODE_VERSION === "string" ? OPENCODE_VERSION : "local"
+  const BASE_VERSION = typeof OPENCODE_VERSION === "string" ? OPENCODE_VERSION : "local"
+  const SNOWFLAKE_SUFFIX = "-snowflake-cortex"
+  export const VERSION = BASE_VERSION.includes("snowflake") ? BASE_VERSION : `${BASE_VERSION}${SNOWFLAKE_SUFFIX}`
   export const CHANNEL = typeof OPENCODE_CHANNEL === "string" ? OPENCODE_CHANNEL : "local"
   export const USER_AGENT = `opencode/${CHANNEL}/${VERSION}/${Flag.OPENCODE_CLIENT}`
 
