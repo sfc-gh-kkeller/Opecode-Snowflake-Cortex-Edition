@@ -132,7 +132,7 @@ export function Home() {
         </box>
         <box flexGrow={1} />
         <box flexShrink={0}>
-          <text fg={theme.textMuted}>{Installation.VERSION}</text>
+          <text fg={theme.textMuted}>❄ Snowflake Cortex POT v1.0 | Kevin Keller | based on opencode 1.1.48</text>
         </box>
       </box>
     </>
