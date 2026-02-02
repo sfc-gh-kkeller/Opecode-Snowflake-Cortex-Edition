@@ -92,13 +92,17 @@ export function Home() {
   const keybind = useKeybind()
 
   const snowflakeArt = [
-    "      *     *      ",
-    "   *     *     *   ",
-    "      *  *  *      ",
-    " *   *   *   *   * ",
-    "      *  *  *      ",
-    "   *     *     *   ",
-    "      *     *      ",
+    "        /\\        ",
+    "        \\/        ",
+    "   _-_-_/\\_-_-_   ",
+    "  /_/\\_/\\/\\_/\\_\\  ",
+    "     \\_\\/\\_/_     ",
+    "     /_/\\/\\_\\     ",
+    "  _-_-_\\/\\_-_-_   ",
+    " /_/\\_/\\/\\_/\\_\\  ",
+    "    /_\\/\\/_\\      ",
+    "       /\\         ",
+    "       \\/         ",
   ]
 
   return (
@@ -110,7 +114,7 @@ export function Home() {
           <box>
             <For each={snowflakeArt}>
               {(line) => (
-                <text fg={theme.primary} selectable={false}>
+                <text fg={theme.info} selectable={false}>
                   {line}
                 </text>
               )}
