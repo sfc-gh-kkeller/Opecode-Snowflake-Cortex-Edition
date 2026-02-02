@@ -6,6 +6,8 @@ import { Installation } from "@/installation"
 export async function upgrade() {
   const config = await Config.global()
   const method = await Installation.method()
+  // Snowflake Cortex Edition: disable auto-update checks/notifications
+  if (Installation.VERSION.includes("snowflake-cortex")) return
   const latest = await Installation.latest(method).catch(() => {})
   if (!latest) return
   if (Installation.VERSION === latest) return
