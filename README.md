@@ -88,7 +88,13 @@ bun dev
 
 Configure Snowflake Cortex:
 
-Create `opencode.json` in your project (or `~/.opencode/opencode.jsonc` for user-wide config):
+Use the onboarding wizard (recommended):
+
+```bash
+opencode_cortex cortex-init
+```
+
+Or create `opencode_cortex.json` in your project (or `~/.config/opencode/opencode_cortex.jsonc` for user-wide config):
 
 ```jsonc
 {

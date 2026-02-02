@@ -301,7 +301,7 @@ print_success() {
     echo -e "  cd <project>  ${MUTED}# Open directory${NC}"
     echo -e "  opencode_cortex ${MUTED}# Run command${NC}"
     echo -e ""
-    echo -e "${MUTED}Configure Cortex in opencode.json - see:${NC}"
+    echo -e "${MUTED}Configure Cortex in opencode_cortex.json - see:${NC}"
     echo -e "https://github.com/${REPO}#snowflake-cortex-edition"
     echo -e ""
 

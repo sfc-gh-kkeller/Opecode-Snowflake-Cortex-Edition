@@ -96,7 +96,7 @@ export namespace Config {
 
     // Project config has highest precedence (overrides global and remote)
     if (!Flag.OPENCODE_DISABLE_PROJECT_CONFIG) {
-      for (const file of ["opencode.jsonc", "opencode.json"]) {
+      for (const file of projectConfigFiles) {
         const found = await Filesystem.findUp(file, Instance.directory, Instance.worktree)
         for (const resolved of found.toReversed()) {
           result = mergeConfigConcatArrays(result, await loadFile(resolved))
@@ -143,7 +143,7 @@ export namespace Config {
 
     for (const dir of unique(directories)) {
       if (dir.endsWith(".opencode") || dir === Flag.OPENCODE_CONFIG_DIR) {
-        for (const file of ["opencode.jsonc", "opencode.json"]) {
+        for (const file of projectConfigFiles) {
           log.debug(`loading config from ${path.join(dir, file)}`)
           result = mergeConfigConcatArrays(result, await loadFile(path.join(dir, file)))
           // to satisfy the type checker
@@ -168,7 +168,7 @@ export namespace Config {
     // which would fail on system directories requiring elevated permissions
     // This way it only loads config file and not skills/plugins/commands
     if (existsSync(managedConfigDir)) {
-      for (const file of ["opencode.jsonc", "opencode.json"]) {
+      for (const file of projectConfigFiles) {
         result = mergeConfigConcatArrays(result, await loadFile(path.join(managedConfigDir, file)))
       }
     }
@@ -1105,12 +1105,15 @@ export namespace Config {
 
   export type Info = z.output<typeof Info>
 
+  const isSnowflakeEdition = Installation.VERSION.includes("snowflake-cortex")
+  const cortexConfigFiles = isSnowflakeEdition ? ["opencode_cortex.jsonc", "opencode_cortex.json"] : []
+  const projectConfigFiles = ["opencode.jsonc", "opencode.json", ...cortexConfigFiles]
+
   export const global = lazy(async () => {
+    const globalFiles = ["config.json", "opencode.json", "opencode.jsonc", ...cortexConfigFiles]
     let result: Info = pipe(
       {},
-      mergeDeep(await loadFile(path.join(Global.Path.config, "config.json"))),
-      mergeDeep(await loadFile(path.join(Global.Path.config, "opencode.json"))),
-      mergeDeep(await loadFile(path.join(Global.Path.config, "opencode.jsonc"))),
+      ...globalFiles.map((file) => mergeDeep(await loadFile(path.join(Global.Path.config, file)))),
     )
 
     const legacy = path.join(Global.Path.config, "config")

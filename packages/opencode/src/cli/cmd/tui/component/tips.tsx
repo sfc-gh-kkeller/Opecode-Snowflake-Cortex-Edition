@@ -49,7 +49,7 @@ export function Tips() {
 }
 
 const TIPS = [
-  "Snowflake Cortex quickstart: {highlight}cd <project>{/highlight} # Open directory, {highlight}opencode_cortex{/highlight} # Run command. Configure Cortex in opencode.json: https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition#snowflake-cortex-edition",
+  "Snowflake Cortex quickstart: {highlight}cd <project>{/highlight} # Open directory, {highlight}opencode_cortex{/highlight} # Run command. Configure Cortex in opencode_cortex.json: https://github.com/sfc-gh-kkeller/Opecode-Snowflake-Cortex-Edition#snowflake-cortex-edition",
   "Type {highlight}@{/highlight} followed by a filename to fuzzy search and attach files",
   "Start a message with {highlight}!{/highlight} to run shell commands directly (e.g., {highlight}!ls -la{/highlight})",
   "Press {highlight}Tab{/highlight} to cycle between Build and Plan agents",
@@ -81,8 +81,8 @@ const TIPS = [
   "Switch to {highlight}Plan{/highlight} agent to get suggestions without making actual changes",
   "Use {highlight}@agent-name{/highlight} in prompts to invoke specialized subagents",
   "Press {highlight}Ctrl+X Right/Left{/highlight} to cycle through parent and child sessions",
-  "Create {highlight}opencode.json{/highlight} in project root for project-specific settings",
-  "Place settings in {highlight}~/.config/opencode/opencode.json{/highlight} for global config",
+  "Create {highlight}opencode_cortex.json{/highlight} in project root for Snowflake settings",
+  "Place settings in {highlight}~/.config/opencode/opencode_cortex.json{/highlight} for global Snowflake config",
   "Add {highlight}$schema{/highlight} to your config for autocomplete in your editor",
   "Configure {highlight}model{/highlight} in config to set your default model",
   "Override any keybind in config via the {highlight}keybinds{/highlight} section",

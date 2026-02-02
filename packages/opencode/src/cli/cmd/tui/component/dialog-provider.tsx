@@ -13,6 +13,10 @@ import { DialogModel } from "./dialog-model"
 import { useKeyboard } from "@opentui/solid"
 import { Clipboard } from "@tui/util/clipboard"
 import { useToast } from "../ui/toast"
+import path from "path"
+import { Global } from "@/global"
+import { loadSnowflakeCliProfiles } from "@/cli/snowflake-cli"
+import { buildBaseUrl, writeCortexConfig } from "@/cli/snowflake-config"
 
 const PROVIDER_PRIORITY: Record<string, number> = {
   opencode: 0,
@@ -22,10 +26,118 @@ const PROVIDER_PRIORITY: Record<string, number> = {
   google: 4,
 }
 
+function parseModels(input: string) {
+  return input
+    .split(/[\s,]+/)
+    .map((model) => model.trim())
+    .filter(Boolean)
+}
+
+async function selectDialog<T>(
+  dialog: ReturnType<typeof useDialog>,
+  title: string,
+  options: { title: string; value: T; description?: string; footer?: string }[],
+) {
+  return new Promise<T | null>((resolve) => {
+    dialog.replace(
+      () => <DialogSelect title={title} options={options} onSelect={(option) => resolve(option.value)} />,
+      () => resolve(null),
+    )
+  })
+}
+
+async function runSnowflakeSetup(dialog: ReturnType<typeof useDialog>, sdk: ReturnType<typeof useSDK>, sync: ReturnType<typeof useSync>, toast: ReturnType<typeof useToast>) {
+  const profiles = await loadSnowflakeCliProfiles()
+  let account = ""
+  let token: string | undefined
+
+  if (profiles.length) {
+    const picked = await selectDialog(
+      dialog,
+      "Import Snowflake CLI settings?",
+      [
+        ...profiles.map((profile) => ({
+          title: `${profile.name}${profile.account ? ` (${profile.account})` : ""}`,
+          value: profile.name,
+          footer: profile.source,
+        })),
+        { title: "Manual setup", value: "manual" },
+      ],
+    )
+    if (picked == null) return false
+    if (picked !== "manual") {
+      const profile = profiles.find((p) => p.name === picked)
+      if (profile?.account) account = profile.account
+      if (profile?.token) token = profile.token
+    }
+  }
+
+  if (!account) {
+    const accountInput = await DialogPrompt.show(dialog, "Snowflake account identifier", {
+      placeholder: "xy12345.us-east-1",
+    })
+    if (!accountInput) return false
+    account = accountInput
+  }
+
+  const baseURL = await DialogPrompt.show(dialog, "Snowflake Cortex base URL", {
+    value: buildBaseUrl(account),
+  })
+  if (!baseURL) return false
+
+  const authChoice = await selectDialog(dialog, "How should we store your Snowflake PAT?", [
+    ...(token ? [{ title: "Use token from Snowflake CLI config", value: "cli" as const }] : []),
+    { title: "Use environment variable", value: "env" as const },
+    { title: "Paste token now", value: "paste" as const },
+  ])
+  if (!authChoice) return false
+  if (authChoice === "env") {
+    const envVar = await DialogPrompt.show(dialog, "Environment variable name", {
+      value: "SNOWFLAKE_PAT",
+    })
+    if (!envVar) return false
+    token = `{env:${envVar}}`
+  } else if (authChoice === "paste") {
+    const pasted = await DialogPrompt.show(dialog, "Snowflake PAT", {
+      placeholder: "paste token here",
+    })
+    if (!pasted) return false
+    token = pasted
+  }
+
+  const modelsInput = await DialogPrompt.show(dialog, "Snowflake Cortex models", {
+    value: "claude-opus-4-5",
+    placeholder: "comma or space separated",
+  })
+  if (!modelsInput) return false
+  const models = parseModels(modelsInput)
+
+  const projectPath = path.join(process.cwd(), "opencode_cortex.jsonc")
+  const globalPath = path.join(Global.Path.config, "opencode_cortex.jsonc")
+  const configPath = await selectDialog(dialog, "Where should we write opencode_cortex.jsonc?", [
+    { title: "Current project", value: projectPath, description: projectPath },
+    { title: "Global", value: globalPath, description: globalPath },
+  ])
+  if (!configPath) return false
+
+  await writeCortexConfig(configPath, {
+    account,
+    baseURL,
+    apiKey: token,
+    models,
+  })
+
+  await sdk.client.instance.dispose()
+  await sync.bootstrap()
+  toast.show({ message: `Saved Snowflake config to ${configPath}`, variant: "success" })
+  return true
+}
+
 export function createDialogProviderOptions() {
   const sync = useSync()
   const dialog = useDialog()
   const sdk = useSDK()
+  const toast = useToast()
   const connected = createMemo(() => new Set(sync.data.provider_next.connected))
   const options = createMemo(() => {
     return pipe(
@@ -44,6 +156,13 @@ export function createDialogProviderOptions() {
           category: provider.id in PROVIDER_PRIORITY ? "Popular" : "Other",
           footer: isConnected ? "Connected" : undefined,
           async onSelect() {
+            if (provider.id === "snowflake-cortex") {
+              const done = await runSnowflakeSetup(dialog, sdk, sync, toast)
+              if (done) {
+                dialog.replace(() => <DialogModel providerID={provider.id} />)
+              }
+              return
+            }
             const methods = sync.data.provider_auth[provider.id] ?? [
               {
                 type: "api",

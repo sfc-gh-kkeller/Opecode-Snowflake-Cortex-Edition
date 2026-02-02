@@ -1,5 +1,5 @@
 import { Prompt, type PromptRef } from "@tui/component/prompt"
-import { createMemo, For, Match, onMount, Show, Switch } from "solid-js"
+import { createMemo, Match, onMount, Show, Switch } from "solid-js"
 import { useTheme } from "@tui/context/theme"
 import { useKeybind } from "@tui/context/keybind"
 import { Logo } from "../component/logo"
@@ -91,36 +91,13 @@ export function Home() {
 
   const keybind = useKeybind()
 
-  const snowflakeArt = [
-    "       /\\        ",
-    "       \\/        ",
-    "  _-_-_/\\_-_-_   ",
-    "/_/\\_/\\/\\_/\\_\\  ",
-    "   \\_\\/\\_/_     ",
-    "   /_/\\/\\_\\     ",
-    "  _-_-_\\/\\_-_-_   ",
-    "/_/\\_/\\/\\_/\\_\\  ",
-    "   /_\\/\\/_\\      ",
-    "       /\\         ",
-    "       \\/         ",
-  ]
-
   return (
     <>
       <box flexGrow={1} justifyContent="center" alignItems="center" paddingLeft={2} paddingRight={2} gap={1}>
         <box height={3} />
         <Logo />
         <box alignItems="center" gap={1} paddingTop={1}>
-          <box>
-            <For each={snowflakeArt}>
-              {(line) => (
-                <text fg={theme.info} selectable={false}>
-                  {line}
-                </text>
-              )}
-            </For>
-          </box>
-          <text fg={theme.textMuted}>Snowflake Cortex Edition</text>
+          <text fg={theme.info}>Snowflake Cortex Edition</text>
         </box>
         <box width="100%" maxWidth={75} zIndex={1000} paddingTop={1}>
           <Prompt
