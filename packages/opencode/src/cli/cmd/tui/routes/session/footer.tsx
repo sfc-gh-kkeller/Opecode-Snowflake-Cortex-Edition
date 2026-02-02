@@ -5,15 +5,9 @@ import { useDirectory } from "../../context/directory"
 import { useConnected } from "../../component/dialog-model"
 import { createStore } from "solid-js/store"
 import { useRoute } from "../../context/route"
-import { Installation } from "@/installation"
 
-// Snowflake Cortex Edition POT info
-const POT_INFO = {
-  name: "Snowflake Cortex POT",
-  version: "1.0",
-  author: "Kevin Keller",
-  basedOn: "1.1.48",
-}
+// Snowflake Cortex Edition POT branding
+const POT_FOOTER = "❄ Snowflake Cortex Proof of Technology (POT) v1.0 | Kevin Keller | based on opencode 1.1.48"
 
 export function Footer() {
   const { theme } = useTheme()
@@ -94,9 +88,7 @@ export function Footer() {
             <text fg={theme.textMuted}>/status</text>
           </Match>
         </Switch>
-        <text fg={theme.textMuted}>
-          ❄ {POT_INFO.name} v{POT_INFO.version} | {POT_INFO.author} | based on {POT_INFO.basedOn}
-        </text>
+        <text fg={theme.textMuted}>{POT_FOOTER}</text>
       </box>
     </box>
   )

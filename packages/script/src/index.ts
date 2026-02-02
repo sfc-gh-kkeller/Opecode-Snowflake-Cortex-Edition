@@ -38,7 +38,7 @@ const IS_PREVIEW = CHANNEL !== "latest"
 const VERSION = await (async () => {
   if (env.OPENCODE_VERSION) return env.OPENCODE_VERSION
   // Snowflake Cortex Edition POT versioning
-  return `${POT_VERSION}.0-snowflake-cortex-pot-kkeller`
+  return `${POT_VERSION}.0-snowflake-cortex-pot-kevinkeller`
 })()
 
 export const Script = {
