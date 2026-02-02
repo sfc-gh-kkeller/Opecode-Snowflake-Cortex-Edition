@@ -1257,7 +1257,8 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
           if (!err) return false
           if (err.name === "MessageAbortedError") return false
           // Snowflake Cortex: suppress "assistant role in final position" error
-          const msg = err.data?.message || ""
+          const msg =
+            typeof err.data?.message === "string" ? err.data.message : String(err.data?.message ?? "")
           if (msg.includes("assistant") && msg.includes("final position") && msg.includes("tools")) return false
           return true
         })()}
