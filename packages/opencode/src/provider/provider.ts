@@ -1016,36 +1016,13 @@ export namespace Provider {
           }
         }
 
-        // Snowflake Cortex compatibility fixes
+        // Snowflake Cortex compatibility: transform max_tokens to max_completion_tokens
         if (options["snowflakeCortex"] && opts.body && opts.method === "POST") {
           try {
             const body = JSON.parse(opts.body as string)
-            let modified = false
-
-            // Fix 1: Transform max_tokens to max_completion_tokens
-            // Snowflake's OpenAI-compatible API requires max_completion_tokens instead of max_tokens
             if (body.max_tokens !== undefined && body.max_completion_tokens === undefined) {
               body.max_completion_tokens = body.max_tokens
               delete body.max_tokens
-              modified = true
-            }
-
-            // Fix 2: Add user message if last message is assistant and tools are present
-            // Snowflake doesn't allow assistant as final message when tools are used
-            if (
-              Array.isArray(body.tools) &&
-              body.tools.length > 0 &&
-              Array.isArray(body.messages) &&
-              body.messages.length > 0
-            ) {
-              const lastMsg = body.messages[body.messages.length - 1]
-              if (lastMsg?.role === "assistant") {
-                body.messages.push({ role: "user", content: "Continue." })
-                modified = true
-              }
-            }
-
-            if (modified) {
               opts.body = JSON.stringify(body)
             }
           } catch {
