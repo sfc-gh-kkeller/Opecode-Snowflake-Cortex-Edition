@@ -337,6 +337,16 @@ export namespace SessionProcessor {
               if (needsCompaction) break
             }
           } catch (e: any) {
+            // Snowflake Cortex: treat "assistant role in final position" as normal stop
+            // This happens when tools are defined but conversation naturally ends
+            const errMsg = e?.message || e?.toString() || ""
+            if (errMsg.includes("assistant") && errMsg.includes("final position") && errMsg.includes("tools")) {
+              log.info("Snowflake Cortex conversation complete (assistant final position)", {
+                sessionID: input.sessionID,
+              })
+              break // Exit normally, not an error
+            }
+
             log.error("process", {
               error: e,
               stack: JSON.stringify(e.stack),
