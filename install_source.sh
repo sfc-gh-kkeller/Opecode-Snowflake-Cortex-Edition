@@ -206,6 +206,8 @@ install_binary() {
     mkdir -p "$INSTALL_DIR"
     cp "$BUILT_BINARY" "$INSTALL_DIR/opencode_cortex"
     chmod 755 "$INSTALL_DIR/opencode_cortex"
+    # Ensure opencode remains available for vanilla installs only
+    rm -f "$INSTALL_DIR/opencode"
 
     print_info "  Installed: ${INSTALL_DIR}/opencode_cortex"
 }

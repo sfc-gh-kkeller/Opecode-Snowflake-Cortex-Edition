@@ -354,6 +354,8 @@ download_and_install() {
 
     mv "$extracted_binary" "${INSTALL_DIR}/opencode_cortex"
     chmod 755 "${INSTALL_DIR}/opencode_cortex"
+    # Ensure opencode remains available for vanilla installs only
+    rm -f "${INSTALL_DIR}/opencode"
     rm -rf "$tmp_dir"
 }
 
@@ -361,6 +363,8 @@ install_from_binary() {
     print_message info "\n${MUTED}Installing ${NC}opencode_cortex ${MUTED}from: ${NC}$binary_path"
     cp "$binary_path" "${INSTALL_DIR}/opencode_cortex"
     chmod 755 "${INSTALL_DIR}/opencode_cortex"
+    # Ensure opencode remains available for vanilla installs only
+    rm -f "${INSTALL_DIR}/opencode"
 }
 
 if [ -n "$binary_path" ]; then
