@@ -1252,14 +1252,15 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
         }}
       </For>
       <Show
-        when={
-          props.message.error &&
-          props.message.error.name !== "MessageAbortedError" &&
-          // Snowflake Cortex: suppress "assistant role in final position" error (treat as normal stop)
-          !(props.message.error?.data?.message?.includes("assistant") &&
-            props.message.error?.data?.message?.includes("final position") &&
-            props.message.error?.data?.message?.includes("tools"))
-        }
+        when={(() => {
+          const err = props.message.error
+          if (!err) return false
+          if (err.name === "MessageAbortedError") return false
+          // Snowflake Cortex: suppress "assistant role in final position" error
+          const msg = err.data?.message || ""
+          if (msg.includes("assistant") && msg.includes("final position") && msg.includes("tools")) return false
+          return true
+        })()}
       >
         <box
           border={["left"]}

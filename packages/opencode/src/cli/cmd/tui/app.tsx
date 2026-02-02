@@ -641,6 +641,15 @@ function App() {
       return String(error)
     })()
 
+    // Snowflake Cortex: suppress "assistant role in final position" error toast
+    if (
+      message.includes("assistant") &&
+      message.includes("final position") &&
+      message.includes("tools")
+    ) {
+      return
+    }
+
     toast.show({
       variant: "error",
       message,
